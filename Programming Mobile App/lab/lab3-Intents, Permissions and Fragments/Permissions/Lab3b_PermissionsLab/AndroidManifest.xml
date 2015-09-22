@@ -6,10 +6,12 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <!--  TODO - add uses-permission elements -->
-
+	<uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />
+	<uses-permission android:name="course.labs.permissions.DANGEROUS_ACTIVITY_PERM" />
+	 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
