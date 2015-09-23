@@ -1,6 +1,7 @@
 package course.labs.fragmentslab;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ public class MainActivity extends Activity implements
 
 	private FriendsFragment mFriendsFragment;
 	private FeedFragment mFeedFragment;
+	
+	private FragmentManager mFragmentManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,15 +24,25 @@ public class MainActivity extends Activity implements
 		// If the layout is single-pane, create the FriendsFragment 
 		// and add it to the Activity
 
+		// if single-pane，需要手工将frangment加到container里
+		// if two-pane，实际是静态方式生成frangment
+		
 		if (!isInTwoPaneMode()) {
 			
 			mFriendsFragment = new FriendsFragment();
 
 			//TODO 1 - add the FriendsFragment to the fragment_container
+			mFragmentManager =  getFragmentManager();
 			
+			// Start a new FragmentTransaction
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 			
+			// Add the TitleFragment to the layout
+			fragmentTransaction.add(R.id.fragment_container, mFriendsFragment);
 			
-
+			// Commit the FragmentTransaction
+			fragmentTransaction.commit();
+						
 		} else {
 
 			// Otherwise, save a reference to the FeedFragment for later use
@@ -65,9 +78,17 @@ public class MainActivity extends Activity implements
 		if (!isInTwoPaneMode()) {
 
 			//TODO 2 - replace the fragment_container with the FeedFragment
-			
+			// Start a new FragmentTransaction
+			FragmentTransaction fragmentTransaction =  getFragmentManager()
+																	.beginTransaction();
+			// replace  the TitleFragment to the layout
+			fragmentTransaction.replace(R.id.fragment_container, mFeedFragment);  
 
-			
+			// Add this FragmentTransaction to the backstack
+			fragmentTransaction.addToBackStack(null);
+						
+			// Commit the FragmentTransaction
+			fragmentTransaction.commit();
 
 			// execute transaction now
 			getFragmentManager().executePendingTransactions();
