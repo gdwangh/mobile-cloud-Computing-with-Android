@@ -33,6 +33,9 @@ public class FriendsFragment extends ListFragment {
 
 		// Set the list adapter for this ListFragment
 		setListAdapter(new ArrayAdapter<String>(getActivity(), layout, FRIENDS));
+		
+		// Retain this Fragment across Activity reconfigurations
+		setRetainInstance(true);
 	}
 
 		

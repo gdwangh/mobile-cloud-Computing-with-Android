@@ -14,8 +14,10 @@ public class MainActivity extends Activity implements
 	private FriendsFragment mFriendsFragment;
 	private FeedFragment mFeedFragment;
 	
-	private FragmentManager mFragmentManager;
-
+	private static final String FRIENDS_FRAGMENT_TAG = "Friends-Fragment";
+	private static final String FEED_FRAGMENT_TAG = "Feed-Fragment";
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,17 +30,31 @@ public class MainActivity extends Activity implements
 		// if two-pane，实际是静态方式生成frangment
 		
 		if (!isInTwoPaneMode()) {
-			
-			mFriendsFragment = new FriendsFragment();
+			mFriendsFragment = (FriendsFragment)getFragmentManager().findFragmentByTag(FRIENDS_FRAGMENT_TAG);
+			mFeedFragment = (FeedFragment)getFragmentManager().findFragmentByTag(FEED_FRAGMENT_TAG);
 
 			//TODO 1 - add the FriendsFragment to the fragment_container
-			mFragmentManager =  getFragmentManager();
 			
 			// Start a new FragmentTransaction
-			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
 			
-			// Add the TitleFragment to the layout
-			fragmentTransaction.add(R.id.fragment_container, mFriendsFragment);
+			if (mFriendsFragment == null) {  // first enter and new 
+
+				mFriendsFragment = new FriendsFragment();
+
+				// Add the TitleFragment to the layout
+				fragmentTransaction.add(R.id.fragment_container, mFriendsFragment, FRIENDS_FRAGMENT_TAG);
+				
+			}  else {  // recover
+				
+				if (mFriendsFragment.isHidden())  {
+					fragmentTransaction.show(mFeedFragment);
+				}  else {
+					fragmentTransaction.show(mFriendsFragment);
+				}
+			
+			}
 			
 			// Commit the FragmentTransaction
 			fragmentTransaction.commit();
@@ -50,7 +66,6 @@ public class MainActivity extends Activity implements
 			mFeedFragment = (FeedFragment) getFragmentManager()
 					.findFragmentById(R.id.feed_frag);
 		}
-
 	}
 
 	// If there is no fragment_container ID, then the application is in
@@ -76,14 +91,22 @@ public class MainActivity extends Activity implements
 		// If in single-pane mode, replace single visible Fragment
 
 		if (!isInTwoPaneMode()) {
-
+			
 			//TODO 2 - replace the fragment_container with the FeedFragment
 			// Start a new FragmentTransaction
 			FragmentTransaction fragmentTransaction =  getFragmentManager()
-																	.beginTransaction();
-			// replace  the TitleFragment to the layout
-			fragmentTransaction.replace(R.id.fragment_container, mFeedFragment);  
+														.beginTransaction();
+			
+			fragmentTransaction.hide(mFriendsFragment);
 
+			if (!mFeedFragment.isAdded())  { // first enter and new
+				// replace  the TitleFragment to the layout
+				fragmentTransaction.add(R.id.fragment_container, mFeedFragment,FEED_FRAGMENT_TAG);  
+				
+			}  else { 
+				fragmentTransaction.show(mFeedFragment);  
+			}
+			
 			// Add this FragmentTransaction to the backstack
 			fragmentTransaction.addToBackStack(null);
 						
@@ -99,5 +122,7 @@ public class MainActivity extends Activity implements
 		mFeedFragment.updateFeedDisplay(position);
 
 	}
-
+	
 }
+
+	
