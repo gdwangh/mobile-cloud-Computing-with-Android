@@ -5,7 +5,9 @@ import android.app.ListFragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,6 +25,8 @@ public class FriendsFragment extends ListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onCreate()");
+
 		super.onCreate(savedInstanceState);
 
 		// use different layout definition, depending on whether device is pre-
@@ -41,8 +45,12 @@ public class FriendsFragment extends ListFragment {
 		
 	@Override
 	public void onAttach(Activity activity) {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onAttach()");
+
 		super.onAttach(activity);
 
+
+		
 		// Make sure that the hosting Activity has implemented
 		// the SelectionListener callback interface. We need this
 		// because when an item in this ListFragment is selected, 
@@ -58,6 +66,63 @@ public class FriendsFragment extends ListFragment {
 		}
 	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onCreateView()");	
+		
+		return super.onCreateView(inflater, container, savedInstanceState);
+	} 
+	
+	@Override
+	public void onStart() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onStart()");	
+		
+		super.onStart();
+	} 
+
+	@Override
+	public void onResume() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onResume()");	
+		
+		super.onResume();
+	} 
+	
+	@Override
+	public void onPause() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onPause()");	
+		
+		super.onPause();
+	} 	
+
+	@Override
+	public void onStop() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onStop()");	
+		
+		super.onStop();
+	} 	
+	
+	@Override
+	public void onDestroyView() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onDestroyView()");	
+		
+		super.onDestroyView();
+	}	
+
+	@Override
+	public void onDestroy() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onDestroy()");	
+		
+		super.onDestroy();
+	}
+	
+	@Override
+	public void onDetach() {
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onDetach()");	
+		
+		super.onDetach();
+	}	
+	
 	// Note: ListFragments come with a default onCreateView() method.
 	// For other Fragments you'll normally implement this method.
 	// 	@Override
@@ -69,7 +134,7 @@ public class FriendsFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		Log.i(TAG, "Entered onActivityCreated()");
+		Log.i(TAG, "Monitor FriendsFragment lifecycle: onActivityCreated()");	
 
 		// When using two-pane layout, configure the ListView to highlight the
 		// selected list item

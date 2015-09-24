@@ -19,9 +19,12 @@ public class MainActivity extends Activity implements
 	
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {	
+		Log.i(TAG, "Monitor Activity lifecycle: onCreate()");
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
+		
 
 		// If the layout is single-pane, create the FriendsFragment 
 		// and add it to the Activity
@@ -68,6 +71,60 @@ public class MainActivity extends Activity implements
 		}
 	}
 
+	@Override  
+    protected void onStart() {  
+		Log.i(TAG, "Monitor Activity lifecycle: onStart()");
+
+        super.onStart();  
+    }
+	
+    protected void onRestart() {  
+		Log.i(TAG, "Monitor Activity lifecycle: onRestart()");
+
+        super.onRestart();  
+    }
+    
+    protected void onResume() {  
+		Log.i(TAG, "Monitor Activity lifecycle: onResume()");
+
+        super.onResume();  
+    }
+ 
+    @Override  
+    protected void onPause() {  
+		Log.i(TAG, "Monitor Activity lifecycle: onPause()");
+
+        super.onPause();  
+    }
+    
+    @Override  
+    protected void onStop() {  
+		Log.i(TAG, "Monitor Activity lifecycle: onStop()");
+
+        super.onStop();  
+    }
+    
+    @Override  
+    protected void onDestroy() {  
+		Log.i(TAG, "Monitor Activity lifecycle: onDestroy()");
+
+        super.onDestroy();  
+    }
+    
+    @Override  
+    protected void onSaveInstanceState(Bundle outState) {  
+		Log.i(TAG, "Monitor Activity lifecycle: onSaveInstanceState()");
+
+        super.onSaveInstanceState(outState);  
+    }  
+
+    @Override  
+    protected void onRestoreInstanceState(Bundle outState) {  
+		Log.i(TAG, "Monitor Activity lifecycle: onRestoreInstanceState()");
+
+        super.onRestoreInstanceState(outState);  
+    }  
+    
 	// If there is no fragment_container ID, then the application is in
 	// two-pane mode
 
