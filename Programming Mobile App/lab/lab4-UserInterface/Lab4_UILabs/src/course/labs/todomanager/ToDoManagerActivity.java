@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Date;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,15 +48,23 @@ public class ToDoManagerActivity extends ListActivity {
 		getListView().setFooterDividersEnabled(true);
 
 		// TODO - Inflate footerView for footer_view.xml file
-		TextView footerView = null;
-
-
+		// TextView footerView = null;
+		View v = View.inflate(this,R.layout.footer_view,null);
+		TextView footerView = (TextView)v.findViewById(R.id.footerView);
+		
+		/* 因为在一个Activity里如果直接用findViewById()的话,对应的是setConentView()的那个layout里的组件。
+		 * 因此如果当前Activity里需要如果用到别的layout（xml文件）,比如对话框上的layout,这时还要设置对话框上的layout里的组件
+		 * (像图片ImageView,文字TextView)上的内容,所以，就必须用inflate()先将对话框的layout找出来,
+		 * 然后再用这个layout对象去找到它上面的组件*/
+		
+		
 		// NOTE: You can remove this block once you've implemented the assignment
 		if (null == footerView) {
 			return;
-		}
+		} 
+		
 		// TODO - Add footerView to ListView
-
+		getListView().addFooterView(footerView);
 
 		
         
@@ -67,11 +76,16 @@ public class ToDoManagerActivity extends ListActivity {
 
 
 				//TODO - Implement OnClick().
+				Log.i(TAG, "click add ToDoItem.");
+				
+				Intent intent = new Intent( ToDoManagerActivity.this, AddToDoActivity.class);
+				
+				startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
 			}
 		});
 
 		// TODO - Attach the adapter to this ListActivity's ListView
-		
+		setListAdapter(mAdapter);
 	}
 
 	@Override
@@ -83,12 +97,15 @@ public class ToDoManagerActivity extends ListActivity {
 		// if user submitted a new ToDoItem
 		// Create a new ToDoItem from the data Intent
 		// and then add it to the adapter
-
-
-            
-            
-            
-		
+		if ((resultCode == Activity.RESULT_OK) 
+				&& (requestCode == ADD_TODO_ITEM_REQUEST) ) {
+			ToDoItem newItem = new ToDoItem(data);
+			Log.i(TAG, "add ToDoItem: "+newItem.toString());
+			
+			mAdapter.add(newItem);
+			// Log.i(TAG, "In onActivityResult: 2");
+		}
+	
 
 	}
 
