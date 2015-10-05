@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" 
+    style="@style/MyWindowStyle" >
+
+    <SeekBar
+        android:id="@+id/colorSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        style="@style/MySeekBarStyle" />
+
+    <!--  outer LinearLayout -->
+    <LinearLayout
+        android:id="@+id/OuterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/colorSeekBar"
+        android:orientation="horizontal" 
+        android:baselineAligned="false" >
+        
+        <!--
+	     Inner LinearLayout with horizontal orientation
+			and layout weight of 1 out of 2
+	    -->
+
+	    <LinearLayout
+	        android:id="@+id/LeftLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:orientation="vertical" >
+	        
+	        <TextView
+	            android:id="@+id/ColorBlockLeftUp"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_margin="@dimen/block_margin"
+	            android:layout_weight="1"
+	            android:gravity="center_horizontal"
+	            android:text="@string/colorBlockText1" />
+
+	        <TextView
+	            android:id="@+id/ColorBlockLeftBottom"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:gravity="center_horizontal"
+	            android:layout_margin="@dimen/block_margin"
+	            android:text="@string/colorBlockText2" />	        	        	        
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:id="@+id/RightLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:orientation="vertical" >
+	        
+	        <TextView
+	            android:id="@+id/ColorBlockRightUp"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:gravity="center_horizontal"
+	            android:layout_margin="@dimen/block_margin"
+	            android:text="@string/colorBlockText3" />
+
+	        <TextView
+	            android:id="@+id/ColorBlockRightMid"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:gravity="center_horizontal"
+	            android:layout_margin="@dimen/block_margin"
+	            android:text="@string/colorBlockText4"  />	 
+	            
+	        <TextView
+	            android:id="@+id/ColorBlockRightBottom"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:gravity="center_horizontal"
+	            android:layout_margin="@dimen/block_margin"
+	            android:text="@string/colorBlockText5" />		        
+	    </LinearLayout>
+	    
+    </LinearLayout>
+
+</RelativeLayout>
+
