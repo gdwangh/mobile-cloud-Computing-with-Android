@@ -60,10 +60,14 @@ public class MainActivity extends Activity implements SelectionListener,
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "MainActivity onCreate()");
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		mFragmentManager = getFragmentManager();
+		
+		Log.i(TAG, "MainActivity setupFragments()");
 
 		// Reset instance state on reconfiguration
 		if (null != savedInstanceState) {
@@ -75,6 +79,7 @@ public class MainActivity extends Activity implements SelectionListener,
 
 	// One time setup of UI and retained (headless) Fragment
 	private void setupFragments() {
+
 		installFriendsFragment();
 
 		// The feed is fresh if it was downloaded less than 2 minutes ago
@@ -85,10 +90,9 @@ public class MainActivity extends Activity implements SelectionListener,
 
 			// TODO: Show a Toast message displaying
 			// R.string.download_in_progress string
-
-
-			
-			
+			Toast.makeText(MainActivity.this, R.string.download_in_progress_string, Toast.LENGTH_LONG)
+				.show();
+					
 			// Set up a BroadcastReceiver to receive an Intent when download
 			// finishes.
 			mRefreshReceiver = new BroadcastReceiver() {
@@ -99,10 +103,9 @@ public class MainActivity extends Activity implements SelectionListener,
 					// Check to make sure this is an ordered broadcast
 					// Let sender know that the Intent was received
 					// by setting result code to MainActivity.IS_ALIVE
-
-
-					
-					
+					if (isOrderedBroadcast()) {
+						setResultCode(IS_ALIVE);
+					}				
 					
 				}
 			};
@@ -118,6 +121,7 @@ public class MainActivity extends Activity implements SelectionListener,
 
 	// Add Friends Fragment to Activity
 	private void installFriendsFragment() {
+		Log.i(TAG, "MainActivity installFriendsFragment()");
 
 		// Make new Fragment
 		mFriendsFragment = new FriendsFragment();
@@ -131,6 +135,7 @@ public class MainActivity extends Activity implements SelectionListener,
 
 	// Add DownloaderTaskFragment to Activity
 	private void installDownloaderTaskFragment() {
+		Log.i(TAG, "MainActivity installFriendsFragment()");
 
 		// Make new Fragment
 		mDownloaderFragment = new DownloaderTaskFragment();
@@ -150,12 +155,14 @@ public class MainActivity extends Activity implements SelectionListener,
 	protected void onResume() {
 		super.onResume();
 
+		Log.i(TAG, "Register the BroadcastReceiver: DATA_REFRESHED_ACTION");
+		
 		// TODO:
 		// Register the BroadcastReceiver to receive a
 		// DATA_REFRESHED_ACTION broadcast
-
+		IntentFilter intentFilter = new IntentFilter(DATA_REFRESHED_ACTION);
 		
-		
+		registerReceiver(mRefreshReceiver, intentFilter);
 		
 	}
 
@@ -166,10 +173,11 @@ public class MainActivity extends Activity implements SelectionListener,
 		// Unregister the BroadcastReceiver if it has been registered
 		// Note: check that mRefreshReceiver is not null before attempting to
 		// unregister in order to work around an Instrumentation issue
+		if (mRefreshReceiver!=null) {
+			Log.i(TAG, "unRegister the BroadcastReceiver: DATA_REFRESHED_ACTION");
 
-
-		
-		
+			unregisterReceiver(mRefreshReceiver);
+		}
 		
 		super.onPause();
 
@@ -181,13 +189,18 @@ public class MainActivity extends Activity implements SelectionListener,
 
 	// Called back by DownloaderTask after data has been loaded
 	public void notifyDataRefreshed(String[] feeds) {
+		
+		Log.i(TAG, "MainActivity notifyDataRefreshed. feeds:"+feeds.length);
 
 		// Process downloaded data
 		parseJSON(feeds);
 
+		Log.i(TAG, "MainActivity before allowUserClicks. ");
+		
 		// Enable user interaction
 		mIsInteractionEnabled = true;
 		allowUserClicks();
+		Log.i(TAG, "MainActivity after allowUserClicks. ");
 
 	};
 
