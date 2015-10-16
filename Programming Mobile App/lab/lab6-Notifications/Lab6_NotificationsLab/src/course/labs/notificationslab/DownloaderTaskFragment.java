@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -30,6 +32,8 @@ public class DownloaderTaskFragment extends Fragment {
 	private Context mContext;
 	private final int MY_NOTIFICATION_ID = 11151990;
 
+	private DownloaderTask mDownloadTask;
+	
 	@SuppressWarnings("unused")
 	private static final String TAG = "Lab-Notifications";
 
@@ -82,6 +86,28 @@ public class DownloaderTaskFragment extends Fragment {
 		mCallback = null;
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mDownloadTask = null;
+	}
+	
+	public void downloaderForAlarmService(Context context, Integer[] param) {
+		
+		mContext = context;
+		
+		if (mDownloadTask==null) {
+			// TODO: Create new DownloaderTask that "downloads" data
+			mDownloadTask = new DownloaderTask();
+		}
+			
+		Log.i(TAG, "enter downloaderForAlarmService()" + DateFormat.getDateTimeInstance().format(new Date()));
+
+		// TODO: Start the DownloaderTask
+		mDownloadTask.execute(param);
+		
+	}
+	
 	// TODO: Implement an AsyncTask subclass called DownLoaderTask.
 	// This class must use the downloadTweets method (currently commented
 	// out). Ultimately, it must also pass newly available data back to
@@ -105,6 +131,8 @@ public class DownloaderTaskFragment extends Fragment {
 			Log.i(TAG, "MainActivity DownloaderTaskFragment onPostExecute(): result len="+result.length);
 			
 			if (mCallback != null)  {
+				Log.i(TAG, "MainActivity DownloaderTaskFragment notifyDataRefreshed()");
+
 				mCallback.notifyDataRefreshed(result);
 			}
 		}
@@ -115,8 +143,9 @@ public class DownloaderTaskFragment extends Fragment {
 		// TODO: Uncomment this helper method
 		// Simulates downloading Twitter data from the network
 
-
-	  private String[] downloadTweets(Integer resourceIDS[]) {
+	  // change private to public
+	  // private String[] downloadTweets(Integer resourceIDS[]) {
+		public String[] downloadTweets(Integer resourceIDS[]) {
 	 
 			final int simulatedDelay = 2000;
 			String[] feeds = new String[resourceIDS.length];
@@ -190,9 +219,21 @@ public class DownloaderTaskFragment extends Fragment {
 			// MainActivity.DATA_REFRESHED_ACTION
 			// The result, MainActivity.IS_ALIVE, indicates that MainActivity is
 			// active and in the foreground.
+			Log.i(TAG, "sendOrderedBroadcast mContext="+mContext.toString());
+			
+			
+			Intent tmpIntent = new Intent(MainActivity.DATA_REFRESHED_ACTION);
+			tmpIntent.setFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);  // debug
 
-			mContext.sendOrderedBroadcast(new Intent(
-					MainActivity.DATA_REFRESHED_ACTION), null,
+			/* mContext.sendOrderedBroadcast(intent, 
+			 * 								receiverPermission, 
+			 * 								resultReceiver, 
+			 * 								scheduler, 
+			 * 								initialCode, 
+			 * 								initialData, 
+			 * 								initialExtras)
+			 */
+			mContext.sendOrderedBroadcast(tmpIntent, null,
 					new BroadcastReceiver() {
 
 						final String failMsg = mContext
@@ -209,11 +250,13 @@ public class DownloaderTaskFragment extends Fragment {
 							// received the broadcast
 							
 							boolean isActive = (getResultCode()==MainActivity.IS_ALIVE);
-							Log.i(TAG, "MainActivity DownloaderTaskFragment check whether or not the MainActivity received the broadcast.resultCode="
+							Log.i(TAG, "sendOrderedBroadcast.resultCode="
 									+getResultCode()+", isActive="+isActive);
 														
 							// if (true || false) {
-							if (!isActive) {
+							// when called by RefreshDownloadDataIntentService, could not get
+							// the activity to callback.
+							if ((mCallback==null) || (!isActive)) {  
 								Log.i(TAG, "MainActivity DownloaderTaskFragment PendingIntent");
 								
 								// TODO: If not, create a PendingIntent using
@@ -301,7 +344,6 @@ public class DownloaderTaskFragment extends Fragment {
 				}
 			}
 		}
-
 
 	 }
 }

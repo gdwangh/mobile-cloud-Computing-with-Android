@@ -5,21 +5,26 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -42,6 +47,8 @@ public class MainActivity extends Activity implements SelectionListener,
 			"msrebeccablack", "ladygaga" };
 	public static final int IS_ALIVE = Activity.RESULT_FIRST_USER;
 	public static final String DATA_REFRESHED_ACTION = "course.labs.notificationslabnew.DATA_REFRESHED";
+	public static final String ACTION_RE_DOWNLOAD = "course.labs.notificationslab.action.ACTION_RE_DOWNLOAD";
+
 	private static final String TAG = "Lab-Notifications";
 
 	// Raw feed file IDs used to reference stored tweet data
@@ -74,7 +81,8 @@ public class MainActivity extends Activity implements SelectionListener,
 			restoreState(savedInstanceState);
 		} else {
 			setupFragments();
-		}
+			startAlarmReDownload();
+		}	
 	}
 
 	// One time setup of UI and retained (headless) Fragment
@@ -98,7 +106,8 @@ public class MainActivity extends Activity implements SelectionListener,
 			mRefreshReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {
-
+					Log.i(TAG, "Receive sendOrderedBroadcast context="+context.toString()+",isOrderedBroadcast="+isOrderedBroadcast());
+					
 					// TODO:
 					// Check to make sure this is an ordered broadcast
 					// Let sender know that the Intent was received
@@ -163,7 +172,6 @@ public class MainActivity extends Activity implements SelectionListener,
 		IntentFilter intentFilter = new IntentFilter(DATA_REFRESHED_ACTION);
 		
 		registerReceiver(mRefreshReceiver, intentFilter);
-		
 	}
 
 	@Override
@@ -349,5 +357,43 @@ public class MainActivity extends Activity implements SelectionListener,
 			}
 		}
 		return rawFeeds.toArray(new String[rawFeeds.size()]);
+	}
+	
+	// set up alarm to refresh data
+	private void startAlarmReDownload() {
+		
+		Log.i(TAG, "install Refresh data Alarm at " + DateFormat.getDateTimeInstance().format(new Date()));
+		
+		// try Broadcast alarm 
+		/* 
+		final Intent refreshIntent = new Intent(this.getApplicationContext(), 
+										ReDownloadReceiver.class);
+		
+		PendingIntent pendingIntent =  PendingIntent.getBroadcast(MainActivity.this, 0,
+				refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT); 
+		*/
+		// try service alarm
+		final Intent refreshIntent = new Intent(this.getApplicationContext(), 
+											RefreshDownloadDataIntentService.class);
+		refreshIntent.setAction(ACTION_RE_DOWNLOAD);
+		refreshIntent.putExtra(TAG_FRIEND_RES_IDS, sRawTextFeedIds);
+
+		// debug
+		refreshIntent.setFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);
+		
+		PendingIntent pendingIntent =  PendingIntent.getService(MainActivity.this, 0,
+									refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		// cancel the same alarm before
+		alarmManager.cancel(pendingIntent);
+		
+		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+						SystemClock.elapsedRealtime()+TWO_MIN,
+						TWO_MIN, pendingIntent);
+		
+		
+		
 	}
 }

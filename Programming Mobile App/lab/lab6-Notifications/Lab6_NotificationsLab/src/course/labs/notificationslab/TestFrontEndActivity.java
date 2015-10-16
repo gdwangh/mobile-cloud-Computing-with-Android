@@ -10,10 +10,14 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -63,11 +67,35 @@ public class TestFrontEndActivity extends Activity {
 						MainActivity.class));
 			}
 		});
+		
+		Button endRrefreshServiceServiceButton = (Button) findViewById(R.id.end_refresh_button);
+		endRrefreshServiceServiceButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				cancelRefreshAlarm();
+			}
+		});
 
 		createTweetFileIfMissing();
 
 	}
 
+	private void cancelRefreshAlarm() {
+		final Intent refreshIntent = new Intent(this.getApplicationContext(), 
+												RefreshDownloadDataIntentService.class);
+		refreshIntent.setAction(MainActivity.ACTION_RE_DOWNLOAD);
+		PendingIntent pendingIntent =  PendingIntent.getService(this.getApplicationContext(), 0,
+										refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		// cancel the same alarm before
+		alarmManager.cancel(pendingIntent);
+		Log.i(TAG, "kill the refresh alarm");
+	}
+	
+	
 	private void createTweetFileIfMissing() {
 
 		File file = new File(sFileName);

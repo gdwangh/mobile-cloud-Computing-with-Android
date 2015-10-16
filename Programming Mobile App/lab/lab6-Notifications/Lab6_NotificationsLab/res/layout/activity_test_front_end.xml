@@ -33,4 +33,12 @@
         android:layout_margin="@dimen/base_margin"
         android:text="@string/start_main_activity" />
 
+        <Button
+        android:id="@+id/end_refresh_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/base_margin"
+        android:text="@string/end_refresh_data_alarm" />
+        
 </LinearLayout>
