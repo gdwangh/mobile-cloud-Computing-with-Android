@@ -8,6 +8,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
+import android.util.Log;
 
 public class MockLocationProvider {
 
@@ -35,6 +36,7 @@ public class MockLocationProvider {
 				.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
 		mockLocation.setAccuracy(sMockAccuracy);
 		mLocationManager.setTestProviderLocation(mProviderName, mockLocation);
+		Log.i("MockLocationProvider", "setTestProviderLocation(): time="+mockLocation.getTime());
 	}
 
 	public void shutdown() {
