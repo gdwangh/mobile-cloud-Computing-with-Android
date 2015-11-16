@@ -48,7 +48,11 @@ public class MainActivity extends ListActivity {
 	private String JPEG_FILE_SUFFIX = ".jpg";
 	private String TAG = "Lab-DailySelfie";
 	private static final long INTERVAL_TWO_MINUTES = 2 * 60 * 1000L;
-	private static final int CONTEXT_MENU_DELETE = 1;
+	
+	// context menu
+	private static final int CONTEXT_MENU_VIEW = 1;
+	private static final int CONTEXT_MENU_DELETE = 2;
+	private static final int CONTEXT_MENU_DELETEALL = 3;
 	
 	private String mAlbumName = "DailySelfie";
 	private File mAlbumDir;
@@ -120,9 +124,6 @@ public class MainActivity extends ListActivity {
 	        	
 	            return true;
 	            
-	        case R.id.menu_action_deleteAll:
-	        	deleteAllImage();
-	        	return true;
 	        default:
 	        	return super.onOptionsItemSelected(item);
         }
@@ -138,7 +139,10 @@ public class MainActivity extends ListActivity {
         menu.setHeaderTitle("operation");
         
         // add context menu item
+        menu.add(0, CONTEXT_MENU_VIEW, Menu.NONE, "View");
         menu.add(0, CONTEXT_MENU_DELETE, Menu.NONE, "Delete");
+        menu.add(0, CONTEXT_MENU_DELETEALL, Menu.NONE, "Delete All");
+
     }
     
     
@@ -147,33 +151,53 @@ public class MainActivity extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
         
         AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-         
+    	int position = menuInfo.position;
+
         Log.i(TAG, "context item seleted ID="+ menuInfo.id);
         
         switch(item.getItemId()) {
+        case CONTEXT_MENU_VIEW:
+        	PhotoRecord image = mAdapter.getItem(position);
+			displayFullSizePhoto(image.getPhotoPath());
+			
+			return true;
+			
         case CONTEXT_MENU_DELETE:
-        	int position = menuInfo.position;
         	String photoPath = mAdapter.getItem(position).getPhotoPath();
         	
         	// delete file and item in the listView
-        	File f = new File(photoPath);
-        	if (f.exists()) {
-        		boolean success = f.delete();
-        		if (success) {
-        			mAdapter.deleteItem(position);
-        		}
-        	}  else {
-        		mAdapter.deleteItem(position);
-        	}
+        	deleteImageFile(photoPath);
+        	mAdapter.deleteItem(position);
         	
-        	break;
-        
+        	return true;
+        	
+        	// break;
+        case CONTEXT_MENU_DELETEALL:
+        	deleteAllImage();
+        	return true;
+        	
         default:
             return super.onContextItemSelected(item);
         }
         
-        return true;
+        // return true;
     }
+  
+    private void deleteImageFile(String filePath) {
+    	File f = new File(filePath);
+    	boolean success = false;
+    	
+    	if (f.exists()) {
+    		success = f.delete();
+    		Log.i(TAG, "delete file : "+filePath);
+    		
+    		if (success) {
+        		galleryRefeshPic(filePath);
+    		}
+    	}  
+    	
+    }
+    
     
     private void deleteAllImage() {
     	
@@ -182,14 +206,12 @@ public class MainActivity extends ListActivity {
     	for (String filename : filelist) {
     		String filePath = mAlbumDir + File.separator + filename;
     		
-    		// delete file
-    		File f = new File(filePath);
-        	if (f.exists()) {
-        		boolean ret = f.delete();
-        		Log.i(TAG, "delete file "+filePath+",ret="+ret);
-        	}  
+    		deleteImageFile(filePath);
+        		
+        	Log.i(TAG, "delete file "+filePath);
+        	  
         }
-
+    	    	
     	mAdapter.removeAllViews();
     }
 
@@ -231,7 +253,7 @@ public class MainActivity extends ListActivity {
     			     	mAdapter.add(newPhoto);
     			     	
     		        } 
-    				galleryAddPic();
+    				galleryRefeshPic(mCurrentPhotoPath);
     			}
     	  
     	 }
@@ -290,9 +312,9 @@ public class MainActivity extends ListActivity {
     
     // invoke the system's media scanner to add your photo to the Media Provider's database, 
     // making it available in the Android Gallery application and to other apps.
-    private void galleryAddPic() {
+    private void galleryRefeshPic(String filename) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
+        File f = new File(filename);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
