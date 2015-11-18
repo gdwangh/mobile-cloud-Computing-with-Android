@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Modern Art UI</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="moreInfo">More Information</string>
+
+    <string name="colorBlockText1"></string>
+    <string name="colorBlockText2"></string>
+    <string name="colorBlockText3"></string>
+    <string name="colorBlockText4"></string>
+    <string name="colorBlockText5"></string>
+    
+    <string name="moreInfo_message">Inspired by the works of Modern Art masters such as Piet Mondrian and Ben Nicholson. \n\n Click below to learned more! </string>
+	<string name="YesMsg">Visit MOMA</string>
+	<string name="NoMsg">Not Now</string>
+</resources>
