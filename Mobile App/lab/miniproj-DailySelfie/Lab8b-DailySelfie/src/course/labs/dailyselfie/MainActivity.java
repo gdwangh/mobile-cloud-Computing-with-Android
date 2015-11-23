@@ -251,9 +251,13 @@ public class MainActivity extends ListActivity {
     			}  else {    		        
     			     	PhotoRecord newPhoto = new PhotoRecord(mCurrentPhotoPath);
     			     	mAdapter.add(newPhoto);
-    			     	
     		        } 
     				galleryRefeshPic(mCurrentPhotoPath);
+    			}   else {   // cancel or fail
+    				File f = new File(mCurrentPhotoPath);
+    				if (f.exists()) {
+    					f.delete();
+    				}
     			}
     	  
     	 }
