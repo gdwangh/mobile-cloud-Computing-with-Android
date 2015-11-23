@@ -82,7 +82,11 @@ public class MainActivity extends ListActivity {
 				Log.i(TAG, "Click listView(position="+position+", id="+id);
 				
 				PhotoRecord image = mAdapter.getItem((int)id);
+				// display photo with ImageActivity
 				displayFullSizePhoto(image.getPhotoPath());
+				
+				// display photo with system view
+				// displayFullSizePhotoWithSysView(image.getPhotoPath());
 			}
 		});
 		
@@ -158,7 +162,12 @@ public class MainActivity extends ListActivity {
         switch(item.getItemId()) {
         case CONTEXT_MENU_VIEW:
         	PhotoRecord image = mAdapter.getItem(position);
-			displayFullSizePhoto(image.getPhotoPath());
+			
+			// display photo with ImageActivity
+			// displayFullSizePhoto(image.getPhotoPath());
+			
+			// display photo with system view
+			displayFullSizePhotoWithSysView(image.getPhotoPath());
 			
 			return true;
 			
@@ -363,6 +372,27 @@ public class MainActivity extends ListActivity {
 
     	// Launch the Activity using the intent
 		startActivity(showImageIntent);
+    }
+   
+    // show picutres with ACTION_VIEW
+    private void displayFullSizePhotoWithSysView(String path) {
+    	
+    	// Create an intent stating which Activity you would like to
+		// start
+    	Intent showImageIntent = new Intent(Intent.ACTION_VIEW);  
+    	if (showImageIntent.resolveActivity(getPackageManager()) == null) {
+    		Toast.makeText(getApplicationContext(), 
+    						"No application could be used to view the pictures", 
+    						Toast.LENGTH_LONG)
+    			.show();	
+    	}  else {
+    		Uri uri = Uri.fromFile(new File(path));
+        	showImageIntent.setDataAndType(uri, "image/");
+        	showImageIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            
+        	// Launch the Activity using the intent
+    		startActivity(showImageIntent);
+    	}
     }
     
     private void createAlaram() {
