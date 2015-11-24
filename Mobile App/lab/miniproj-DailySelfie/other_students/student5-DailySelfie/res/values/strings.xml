@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DailySelfie</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete">Delete</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_take_selfie">Take Selfie</string>
+	<string name="image_capture_failed">Selfie image capture failed</string>
+	<string name="no_selfies">No Selfies to display. Take a Selfie and begin your journal!!!</string>
+	<string name="err_loading_files">Not able to load files. Please check if external storage is mounted properly</string>
+	<string name="delete_selfies">Deleted all Selfies. Let\'s start afresh!!!</string>
+	<string name="delete_alert_message">Are you sure you want to delete all your Selfies?</string>
+	<string name="notification_ticker_text">Time to take a Selfie</string>
+	<string name="notification_title">Selfie time!!!</string>
+	<string name="notification_content_text">Don\'t forget to log your Selfie today</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Daily Selfie</string>
+    <string name="camera">Camera</string>
+    <string name="selfie_image_desc">Selfie Image</string>
+    <string name="remove_selfie_ctx_menu_item">Delete Selfies</string>
+    <string name="notification_msg">Time for another selfie"</string>
+</resources>

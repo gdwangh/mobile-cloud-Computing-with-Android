@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DailySelfie</string>
+    <string name="menu_camera_label">Camera</string>
+    <string name="thumb_image_descr">Captured image</string>
+    <string name="title_activity_show_picture">ShowPicture</string>
+    <string name="image_descr">Full image</string>
+    
+    <string name="tickerText"></string>
+    <string name="contentTitle">Daily Selfie</string>
+    <string name="contentText">Time for another selfie</string>
+
+</resources>

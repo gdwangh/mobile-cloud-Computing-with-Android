@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 
+    <color name="rojo">#ff0000</color>
+    <color name="verde">#036603</color>
+    <color name="azul">#0000ff</color>
+    <color name="negro">#000000</color>
+    <color name="defecto">#1b2023</color>
+    <color name="defectoIce">#33b5e5</color>
+ 	<color name="gris">#746f6f</color>
+ 	<color name="grisOscuro">#575555</color>
+ 	<color name="grisClaro">#b2b2b2</color>
+ 	<color name="grisMuyClaro">#c9c7c7</color>
+</resources>

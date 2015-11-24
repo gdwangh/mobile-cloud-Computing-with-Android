@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.dailyselfie.MainActivity" >
+
+    <item
+        android:id="@+id/action_camera"
+		android:title="@string/menu_camera_label"
+		android:icon="@android:drawable/ic_menu_camera"
+		android:showAsAction="always"/>
+
+</menu>

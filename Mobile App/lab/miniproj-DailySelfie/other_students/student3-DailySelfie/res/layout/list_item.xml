@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/listview_selector" >
+
+    <ImageView
+        android:id="@+id/imagen"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/texto1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:text="texto 1"
+        android:textColor="@color/defecto"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/texto2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/texto1"
+        android:layout_below="@+id/texto1"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="-1dp"
+        android:gravity="center_vertical"
+        android:text="texto 2"
+        android:textColor="@color/grisOscuro"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/texto3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/texto2"
+        android:layout_below="@+id/texto2"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="-5dp"
+        android:text="texto 3"
+        android:textColor="@color/gris"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/flecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:text=" "
+        android:textColor="@color/grisClaro"
+        android:textSize="30dp" />
+
+</RelativeLayout>
