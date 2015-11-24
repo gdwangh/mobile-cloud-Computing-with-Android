@@ -9,5 +9,12 @@
         android:title="@string/menu_action_taking_photo_title"
         android:icon="@android:drawable/ic_menu_camera"
     />
+ 
+    <item
+        android:id="@+id/menu_cancel_alarm"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:title="@string/menu_cancel_alarm_title"
+    />
         
 </menu>

@@ -41,7 +41,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.os.Build;
 import android.provider.MediaStore;
 
-public class MainActivity extends ListActivity {
+public class DailySelfieMainActivity extends ListActivity {
 	public static String SHOW_IMAGE = "show_photo_path";
 	
 	private final int TAKE_PHOTO_ACTION_CODE = 1;
@@ -96,6 +96,7 @@ public class MainActivity extends ListActivity {
 		mAlbumDir = null;
 		
         try {
+        	// get the album dir. If not exists, create it
         	mAlbumDir = getmAlbumPath();
         } catch (Exception e) {
         	Log.i(TAG, "Could not make or get external storage path for photo.");
@@ -128,6 +129,11 @@ public class MainActivity extends ListActivity {
 	        	
 	            return true;
 	            
+	        case R.id.menu_cancel_alarm:
+	        	cancel_alarm();
+	        	
+	        	return true;
+	        	
 	        default:
 	        	return super.onOptionsItemSelected(item);
         }
@@ -365,7 +371,7 @@ public class MainActivity extends ListActivity {
     	// Create an intent stating which Activity you would like to
 		// start
     	Intent showImageIntent = new Intent();  
-    	showImageIntent.setClass(MainActivity.this, ImageActivity.class);
+    	showImageIntent.setClass(DailySelfieMainActivity.this, ImageActivity.class);
 
     	// store the path of photo to show  	
     	showImageIntent.putExtra(SHOW_IMAGE, path);
@@ -401,17 +407,26 @@ public class MainActivity extends ListActivity {
     	mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
     	// Create an Intent to broadcast to the AlarmNotificationReceiver
-    	mNotificationReceiverIntent = new Intent(MainActivity.this,
+    	mNotificationReceiverIntent = new Intent(DailySelfieMainActivity.this,
     					AlarmNotificationReceiver.class);
 
     	// Create an PendingIntent that holds the NotificationReceiverIntent
     	mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
-    					MainActivity.this, 0, mNotificationReceiverIntent, 0);
+    					DailySelfieMainActivity.this, 0, mNotificationReceiverIntent, 0);
     	
     	// Set repeating alarm
 		mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 				SystemClock.elapsedRealtime() + INTERVAL_TWO_MINUTES,
 				INTERVAL_TWO_MINUTES,
 				mNotificationReceiverPendingIntent);
+    }
+    
+    private void cancel_alarm() {
+    	// cancel all alarm using mNotificationReceiverPendingIntent
+    	mAlarmManager.cancel(mNotificationReceiverPendingIntent);
+    	
+    	Toast.makeText(getApplicationContext(), "Stop Alarm about DailySelfie!", Toast.LENGTH_LONG)
+    		.show();
+    	
     }
 }
